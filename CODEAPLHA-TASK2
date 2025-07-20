@@ -1,0 +1,76 @@
+import csv
+
+# Step 1: Hardcoded stock prices
+stock_prices = {
+    "AAPL": 180,
+    "TSLA": 250,
+    "MSFT": 320,
+    "GOOGL": 140,
+    "INFY": 1500
+}
+
+portfolio = {}
+total_investment = 0
+
+print("Welcome to Sanjay Shriram's Stock Portfolio Tracker!")
+print("Available stocks:", ', '.join(stock_prices.keys()))
+
+#  Step 2: User input
+while True:
+    stock = input("\nEnter stock symbol (or 'done' to finish): ").upper()
+    
+    if stock == "DONE":
+        break
+    if stock not in stock_prices:
+        print("Invalid stock symbol. Try again.")
+        continue
+    
+    try:
+        quantity = int(input(f"Enter quantity of {stock}: "))
+        if quantity < 0:
+            raise ValueError
+        portfolio[stock] = quantity
+    except ValueError:
+        print("Please enter a valid positive number.")
+        continue
+
+# Step 3: Display summary
+print("\n Investment Summary:")
+for stock, qty in portfolio.items():
+    price = stock_prices[stock]
+    value = price * qty
+    total_investment += value
+    print(f"{stock}: {qty} x ₹{price} = ₹{value}")
+
+print(f"\n Total Investment: ₹{total_investment}")
+
+# Step 4: Save option
+save = input("\nDo you want to save this report? (yes/no): ").lower()
+
+if save == "yes":
+    format_choice = input("Save as (txt/csv): ").lower()
+    
+    if format_choice == "txt":
+        with open("portfolio_report.txt", "w", encoding="utf-8") as file:
+            file.write("Stock Portfolio Report\n")
+            file.write("------------------------\n")
+            for stock, qty in portfolio.items():
+                price = stock_prices[stock]
+                value = qty * price
+                file.write(f"{stock}: {qty} x ₹{price} = ₹{value}\n")
+            file.write(f"\nTotal Investment: ₹{total_investment}\n")
+        print("Report saved to portfolio_report.txt")
+    
+    elif format_choice == "csv":
+        with open("portfolio_report.csv", "w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["Stock", "Quantity", "Price", "Value"])
+            for stock, qty in portfolio.items():
+                price = stock_prices[stock]
+                value = qty * price
+                writer.writerow([stock, qty, price, value])
+            writer.writerow(["", "", "Total", total_investment])
+        print("Report saved to portfolio_report.csv")
+    
+    else:
+        print("Invalid format. Report not saved.")
