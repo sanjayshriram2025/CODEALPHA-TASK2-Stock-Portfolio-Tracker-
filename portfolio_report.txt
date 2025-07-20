@@ -1,0 +1,6 @@
+Stock Portfolio Report
+------------------------
+AAPL: 345 x ₹180 = ₹62100
+TSLA: 367 x ₹250 = ₹91750
+
+Total Investment: ₹153850
